@@ -1,0 +1,74 @@
+doctype html
+html
+    head
+        title CyberSource Checkout API &ndash; Node.js Example
+        meta(name='viewport' content='width=device-width, initial-scale=1')
+        link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css')
+        script(src=`https://h.online-metrix.net/fp/check.js?org_id=${orgId}&session_id=${deviceFingerprintId}`)
+        script(src='https://code.jquery.com/jquery.min.js')
+    body
+        div.section
+            div.container
+                h1.title Checkout Form
+                form.is-checkout-form(method='post' action='https://testsecureacceptance.cybersource.com/pay')
+                    input(type='hidden' name='access_key' value=accessKey)
+                    input(type='hidden' name='locale' value='en-US')
+                    input(type='hidden' name='payment_method' value='card')
+                    input(type='hidden' name='profile_id' value=profileId)
+                    input(type='hidden' name='signature')
+                    input(type='hidden' name='signed_date_time')
+                    input(type='hidden' name='signed_field_names' value=signedFieldNames)
+                    input(type='hidden' name='transaction_type' value='sale')
+                    input(type='hidden' name='transaction_uuid' value=deviceFingerprintId)
+                    input(type='hidden' name='unsigned_field_names' value=unsignedFieldNames)
+                    input(type='hidden' name='reference_number' value=referenceNumber)
+                    div.columns
+                        div.column
+                            div.field
+                                label.label(for='amount') Amount
+                                div.control
+                                    input#amount.input(name='amount' type='tel' placeholder='e.g: 100')
+                        div.column.is-one-fifth
+                            div.field
+                                label.label(for='currency') Currency
+                                div.control
+                                    input#currency.input(name='currency' type='text' placeholder='e.g: USD')
+                    div.columns
+                        div.column.is-one-quarter.is-fullwidth-mobile
+                            button.is-set-default-button.button.is-fullwidth Set defaults
+                        div.column.is-one-quarter.is-fullwidth-mobile
+                            button.button.is-primary.is-fullwidth(type='submit') Pay
+    script.
+      const $ = window.jQuery;
+      const $setDefaultButton = $('.is-set-default-button');
+      const defaults = [
+        { selector: '#amount', value: '10' },
+        { selector: '#currency', value: 'USD' },
+      ];
+      const onClick = function(e) {
+        e.preventDefault();
+
+        defaults.forEach(function(d) {
+          $(d.selector).val(d.value);
+        });
+      };
+
+      $setDefaultButton.on('click', onClick);
+
+      const $checkoutForm = $('.is-checkout-form');
+
+      $checkoutForm.on('submit', function(e) {
+        e.preventDefault();
+
+        const fields = $checkoutForm.serializeArray();
+
+        $.post('/', fields)
+          .then(function(r) {
+            Object.keys(r).forEach(function(k) {
+              $(`input[name=${k}]`).val(r[ k ]);
+            });
+
+            $checkoutForm.off('submit');
+            $checkoutForm.submit();
+          });
+      });
