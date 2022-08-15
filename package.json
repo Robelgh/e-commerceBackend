@@ -1,0 +1,23 @@
+{
+  "name": "ekush-merce",
+  "version": "1.0.0",
+  "description": "e-commerce",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Robelgh/e-commerceBackend.git"
+  },
+  "author": "Robel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Robelgh/e-commerceBackend/issues"
+  },
+  "homepage": "https://github.com/Robelgh/e-commerceBackend#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
